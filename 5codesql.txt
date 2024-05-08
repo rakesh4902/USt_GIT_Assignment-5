@@ -1,0 +1,91 @@
+const mysql = require('mysql');
+
+// Replace with your database credentials
+const connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'your_username',
+  password: 'your_password',
+  // Omit the 'database' property to perform database creation separately
+});
+
+// Connect to MySQL
+connection.connect((err) => {
+  if (err) {
+    console.error('Error connecting to MySQL:', err);
+    return;
+  }
+  console.log('Connected to MySQL');
+
+  // Create the 'mydatabase' database
+  connection.query('CREATE DATABASE IF NOT EXISTS mydatabase', (err) => {
+    if (err) {
+      console.error('Error creating database:', err);
+      return;
+    }
+    console.log('Database "mydatabase" created');
+
+    // Switch to the 'mydatabase' database
+    connection.query('USE mydatabase', (err) => {
+      if (err) {
+        console.error('Error switching to the database:', err);
+        return;
+      }
+      console.log('Using database "mydatabase"');
+
+      // Create a table
+      connection.query(`
+        CREATE TABLE IF NOT EXISTS users (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          username VARCHAR(50) NOT NULL,
+          email VARCHAR(100) NOT NULL
+        )
+      `, (err) => {
+        if (err) {
+          console.error('Error creating table:', err);
+          return;
+        }
+        console.log('Table "users" created');
+
+        // Insert data
+        connection.query('INSERT INTO users (username, email) VALUES (?, ?)', ['JohnDoe', 'johndoe@email.com'], (err) => {
+          if (err) {
+            console.error('Error inserting data:', err);
+            return;
+          }
+          console.log('Data inserted');
+
+          // Select data
+          connection.query('SELECT * FROM users', (err, results) => {
+            if (err) {
+              console.error('Error selecting data:', err);
+              return;
+            }
+            console.log('Selected data:');
+            console.log(results);
+
+            // Update data
+            connection.query('UPDATE users SET email = ? WHERE id = ?', ['newemail@email.com', 1], (err) => {
+              if (err) {
+                console.error('Error updating data:', err);
+                return;
+              }
+              console.log('Data updated');
+
+              // Delete data
+              connection.query('DELETE FROM users WHERE id = ?', [1], (err) => {
+                if (err) {
+                  console.error('Error deleting data:', err);
+                  return;
+                }
+                console.log('Data deleted');
+
+                // Close the connection
+                connection.end();
+              });
+            });
+          });
+        });
+      });
+    });
+  });
+});
