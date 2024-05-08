@@ -1,0 +1,35 @@
+{
+  "name": "git-assignment-5",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rakesh4902/USt_GIT_Assignment-5.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rakesh4902/USt_GIT_Assignment-5/issues"
+  },
+  "homepage": "https://github.com/rakesh4902/USt_GIT_Assignment-5#readme",
+  "devDependencies": {
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2"
+  },
+  "lint-staged": {
+    "*.{js,jsx}": "eslint --fix",
+    "*.{css,scss}": "stylelint --fix",
+    "*.html": "htmlhint",
+    "*.{json,yml}": "prettier --write"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  }
+  
+}
